@@ -11,7 +11,7 @@
     module.exports = factory;
   }
 }(this, function ezLogger (fileName, pattern) {
-  (pattern || (pattern = "[date] [file]:[line]: [message]"));
+  (pattern || (pattern = "[date] [file]:[line] [message]"));
 
   Number.prototype.toTwo = function () {
     if (this > 9) return this.toString();
@@ -41,7 +41,7 @@
       .replace('[file]', file)
       .replace('[line]', line)
       .replace('[date]', Date.simple())
-      .replace('{message]', mess);
+      .replace('[message]', mess);
 
     log.call(console, message);
     fs.appendFile(fileName, message + "\n", function () {
