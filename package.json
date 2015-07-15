@@ -1,6 +1,6 @@
 {
   "name": "ezlogger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Easy Logging Addon for Javascript",
   "main": "ezLogger.js",
   "scripts": {

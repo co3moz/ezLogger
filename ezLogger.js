@@ -24,7 +24,7 @@
 
   Date.simple = function () {
     var now = new Date();
-    return [now.getDate(), now.getMonth(), now.getFullYear()].doEach(Number.prototype.toTwo).join("/") + " " +
+    return [now.getDate(), now.getMonth() + 1, now.getFullYear()].doEach(Number.prototype.toTwo).join("/") + " " +
       [now.getHours(), now.getMinutes(), now.getSeconds()].doEach(Number.prototype.toTwo).join(":");
   };
 
