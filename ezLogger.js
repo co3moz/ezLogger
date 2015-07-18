@@ -39,7 +39,7 @@
     var line = trace[1]["getLineNumber"]();
 
     if (arguments.length > 1) {
-      mess = String.prototype.format.apply(mess, arguments);
+      mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 1));
     }
 
     var message = pattern
