@@ -30,6 +30,7 @@
 
   var stackTrace = require("stack-trace");
   var fs = require("fs");
+  require("ezformat");
 
   var log = console.log;
   console.log = function (mess) {
@@ -37,11 +38,16 @@
     var file = trace[1]["getEvalOrigin"]().split(/\\|\//).pop();
     var line = trace[1]["getLineNumber"]();
 
+    if (arguments.length > 1) {
+      mess = String.prototype.format.apply(mess, arguments);
+    }
+
     var message = pattern
       .replace('[file]', file)
       .replace('[line]', line)
       .replace('[date]', Date.simple())
       .replace('[message]', mess);
+
 
     log.call(console, message);
     fs.appendFile(fileName, message + "\n", function () {
