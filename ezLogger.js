@@ -28,9 +28,16 @@
       [now.getHours(), now.getMinutes(), now.getSeconds()].doEach(Number.prototype.toTwo).join(":");
   };
 
+  Date.simple.more = function() {
+    var now = new Date();
+    return [now.getDate(), now.getMonth() + 1, now.getFullYear()].doEach(Number.prototype.toTwo).join(".");
+  };
+
   var stackTrace = require("stack-trace");
   var fs = require("fs");
   require("ezformat");
+
+
 
   var log = console.log;
   console.log = function (mess) {
@@ -50,7 +57,13 @@
 
 
     log.call(console, message);
-    fs.appendFile(fileName, message + "\n", function () {
-    });
+
+    if(fileName.constructor == Function) {
+      fs.appendFile(fileName(), message + "\n", function () {
+      });
+    } else {
+      fs.appendFile(fileName, message + "\n", function () {
+      });
+    }
   };
 }));

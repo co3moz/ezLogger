@@ -1,3 +1,5 @@
-require("./ezLogger.js")(__dirname + "/test.txt");
-
-console.log("json test {0:j:4}", {hi:1, ho:2, hu:3});
+var ezLogger = require("./ezlogger");
+ezLogger(function() {
+  return __dirname + "/log." + Date.simple.more() + ".txt";
+});
+console.log("That's it!");

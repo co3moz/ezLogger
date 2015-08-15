@@ -30,6 +30,27 @@ log.txt file appeared.
 15/06/2015 15:39:31 app.js:3 That's it!
 ```
 
+Dynamic File
+-------------
+
+Initialize ezlogger with function
+
+```javascript
+var ezLogger = require("ezlogger");
+ezLogger(function() {
+    // you can use Date.simple.more too. It will come with ezlogger
+    return __dirname + "/log." + Date.simple.more() + ".txt";
+});
+console.log("That's it!");
+```
+
+log.15.06.2015.txt file appeared.
+
+```text
+15/06/2015 15:39:31 app.js:5 That's it!
+```
+
+
 ezFormat
 ------------
 
