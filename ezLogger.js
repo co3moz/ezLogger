@@ -11,7 +11,9 @@
     module.exports = factory;
   }
 }(this, function ezLogger (fileName, pattern) {
-  (pattern || (pattern = "[date] [file]:[line] [message]"));
+  (pattern || (pattern = function(file, line, message) {
+    return Date.simple() + " " + file + ":" + line + " " + message;
+  }));
 
   Number.prototype.toTwo = function () {
     if (this > 9) return this.toString();
@@ -49,11 +51,31 @@
       mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 1));
     }
 
-    var message = pattern
-      .replace('[file]', file)
-      .replace('[line]', line)
-      .replace('[date]', Date.simple())
-      .replace('[message]', mess);
+    var message = pattern(file, line, mess);
+
+
+    log.call(console, message);
+
+    if(fileName.constructor == Function) {
+      fs.appendFile(fileName(), message + "\n", function () {
+      });
+    } else {
+      fs.appendFile(fileName, message + "\n", function () {
+      });
+    }
+  };
+
+
+  console.logTrace = function(traceLevel, mess) {
+    var trace = stackTrace.get();
+    var file = trace[traceLevel]["getEvalOrigin"]().split(/\\|\//).pop();
+    var line = trace[traceLevel]["getLineNumber"]();
+
+    if (arguments.length > 2) {
+      mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 2));
+    }
+
+    var message =  pattern(file, line, mess);
 
 
     log.call(console, message);
