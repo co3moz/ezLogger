@@ -11,8 +11,12 @@
     module.exports = factory;
   }
 }(this, function ezLogger (fileName, pattern) {
-  (pattern || (pattern = function(file, line, message) {
+  (pattern || (pattern = function (file, line, message) {
     return Date.simple() + " " + file + ":" + line + " " + message;
+  }));
+
+  (fileName || (fileName = function () {
+    return "./logs/" + Date.simple.more() + ".txt";
   }));
 
   Number.prototype.toTwo = function () {
@@ -30,16 +34,29 @@
       [now.getHours(), now.getMinutes(), now.getSeconds()].doEach(Number.prototype.toTwo).join(":");
   };
 
-  Date.simple.more = function() {
+  Date.simple.more = function () {
     var now = new Date();
     return [now.getDate(), now.getMonth() + 1, now.getFullYear()].doEach(Number.prototype.toTwo).join(".");
   };
 
+  var mkdirp = require("mkdirp");
   var stackTrace = require("stack-trace");
   var fs = require("fs");
   require("ezformat");
 
+  try {
+    var checkTheFolder;
+    if (fileName.constructor == Function) {
+      checkTheFolder = fileName();
+    } else {
+      checkTheFolder = fileName;
+    }
 
+    var eachPart = (checkTheFolder = checkTheFolder.split(/\//), checkTheFolder.pop(), checkTheFolder.join("/"));
+    mkdirp.sync(eachPart);
+  } catch (e) {
+    // ignore the hell
+  }
 
   var log = console.log;
   console.log = function (mess) {
@@ -56,7 +73,7 @@
 
     log.call(console, message);
 
-    if(fileName.constructor == Function) {
+    if (fileName.constructor == Function) {
       fs.appendFile(fileName(), message + "\n", function () {
       });
     } else {
@@ -66,7 +83,7 @@
   };
 
 
-  console.logTrace = function(traceLevel, mess) {
+  console.logTrace = function (traceLevel, mess) {
     var trace = stackTrace.get();
     var file = trace[traceLevel]["getEvalOrigin"]().split(/\\|\//).pop();
     var line = trace[traceLevel]["getLineNumber"]();
@@ -75,12 +92,11 @@
       mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 2));
     }
 
-    var message =  pattern(file, line, mess);
-
+    var message = pattern(file, line, mess);
 
     log.call(console, message);
 
-    if(fileName.constructor == Function) {
+    if (fileName.constructor == Function) {
       fs.appendFile(fileName(), message + "\n", function () {
       });
     } else {

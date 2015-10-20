@@ -1,9 +1,5 @@
 var ezLogger = require("./ezlogger");
-ezLogger(function() {
-  return __dirname + "/log." + Date.simple.more() + ".txt";
-}, function(file, line, message) {
-  return "{3} {0}:{1} {2}".format(file, line, message, Date.simple());
-});
+ezLogger();
 console.log("That's it!");
 myLog("test");
 
