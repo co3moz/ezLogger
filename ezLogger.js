@@ -28,10 +28,6 @@
         console.log("[{method}] {headers.host}{url} from {ip}", request);
         next();
       });
-    },
-
-    expressStarted: function(app) {
-      console.info("application started to listen at {port}", app.server.address());
     }
   };
 
@@ -120,4 +116,6 @@
       });
     }
   };
+
+  return ezLogger;
 }));
