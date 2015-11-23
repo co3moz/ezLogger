@@ -22,7 +22,7 @@
   /**
    * Simply stores standards about libraries.. It helps writing
    */
-  ezLogger.prototype.standard = {
+  ezLogger.standard = {
     express: function(app) {
       app.use(function (request, response, next) {
         console.log("[{method}] {headers.host}{url} from {ip}", request);
