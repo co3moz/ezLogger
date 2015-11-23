@@ -19,6 +19,22 @@
     return "./logs/" + Date.simple.more() + ".txt";
   }));
 
+  /**
+   * Simply stores standards about libraries.. It helps writing
+   */
+  ezLogger.prototype.standard = {
+    express: function(app) {
+      app.use(function (request, response, next) {
+        console.log("[{method}] {headers.host}{url} from {ip}", request);
+        next();
+      });
+    },
+
+    expressStarted: function(app) {
+      console.info("application started to listen at {port}", app.server.address());
+    }
+  };
+
   Number.prototype.toTwo = function () {
     if (this > 9) return this.toString();
     return "0" + this.toString();
