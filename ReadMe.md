@@ -121,4 +121,15 @@ function myLoggerError(message) {
 myLoggerError("test! {0}", 1); // prints  15/06/2015 15:39:31 test.js:9 [ERROR] test! 1
 ```
 
+1.6.0 Features
+------------------
+* console.error added
+* console.errorTrace added
+* handleUncaughtExceptions added.
+
+```javascript
+var ezLogger = require("ezlogger")();
+ezLogger.handleUncaughtExceptions();
+```
+
 [1]:https://github.com/co3moz/ezFormat

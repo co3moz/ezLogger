@@ -22,13 +22,20 @@
   /**
    * Simply stores standards about libraries.. It helps writing
    */
-  ezLogger.standard = {
-    express: function(app) {
-      app.use(function (request, response, next) {
-        console.log("[{method}] {headers.host}{url} from {ip}", request);
-        next();
-      });
-    }
+  ezLogger.express = function (app) {
+    app.use(function (request, response, next) {
+      console.log("[{method}] {headers.host}{url} from {ip}", request);
+      next();
+    });
+    return ezLogger;
+  };
+
+  ezLogger.handleUncaughtExceptions = function () {
+    process.on('uncaughtException', function (err) {
+      console.error('[UNCAUGHTEXCEPTION] {stack}', err);
+    });
+
+    return ezLogger;
   };
 
   Number.prototype.toTwo = function () {
@@ -71,6 +78,7 @@
   }
 
   var log = console.log;
+  var error = console.error;
   console.log = function (mess) {
     var trace = stackTrace.get();
     var file = trace[1]["getEvalOrigin"]().split(/\\|\//).pop();
@@ -94,6 +102,29 @@
     }
   };
 
+  console.error = function (mess) {
+    var trace = stackTrace.get();
+    var file = trace[1]["getEvalOrigin"]().split(/\\|\//).pop();
+    var line = trace[1]["getLineNumber"]();
+
+    if (arguments.length > 1) {
+      mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 1));
+    }
+
+    var message = pattern(file, line, mess);
+
+
+    error.call(console, message);
+
+    if (fileName.constructor == Function) {
+      fs.appendFile(fileName(), message + "\n", function () {
+      });
+    } else {
+      fs.appendFile(fileName, message + "\n", function () {
+      });
+    }
+  };
+
 
   console.logTrace = function (traceLevel, mess) {
     var trace = stackTrace.get();
@@ -107,6 +138,28 @@
     var message = pattern(file, line, mess);
 
     log.call(console, message);
+
+    if (fileName.constructor == Function) {
+      fs.appendFile(fileName(), message + "\n", function () {
+      });
+    } else {
+      fs.appendFile(fileName, message + "\n", function () {
+      });
+    }
+  };
+
+  console.errorTrace = function (traceLevel, mess) {
+    var trace = stackTrace.get();
+    var file = trace[traceLevel]["getEvalOrigin"]().split(/\\|\//).pop();
+    var line = trace[traceLevel]["getLineNumber"]();
+
+    if (arguments.length > 2) {
+      mess = String.prototype.format.apply(mess, Array.prototype.slice.call(arguments, 2));
+    }
+
+    var message = pattern(file, line, mess);
+
+    error.call(console, message);
 
     if (fileName.constructor == Function) {
       fs.appendFile(fileName(), message + "\n", function () {
