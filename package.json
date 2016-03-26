@@ -1,6 +1,6 @@
 {
   "name": "ezlogger",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Easy Logging Script for Javascript",
   "main": "ezLogger.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "Easy",
     "Logger",
     "Node",
-    "Browser"
+    "Browser",
+    "Log"
   ],
   "author": "co3moz",
   "license": "MIT",
@@ -24,7 +25,7 @@
   "homepage": "https://github.com/co3moz/ezLogger",
   "dependencies": {
     "ezformat": "^1.0.0",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "0.5.1",
     "stack-trace": "0.0.9"
   }
 }

@@ -20,19 +20,27 @@
   }));
 
   /**
-   * Simply stores standards about libraries.. It helps writing
+   * Handle express
+   * @returns {ezLogger}
    */
-  ezLogger.express = function (app) {
-    app.use(function (request, response, next) {
-      console.log("[{method}] {headers.host}{url} from {ip}", request);
-      next();
-    });
-    return ezLogger;
+  ezLogger.express = function (request, response, next) {
+    console.log("[{method}] {headers.host}{url} from {ip}", request);
+    next();
   };
 
-  ezLogger.handleUncaughtExceptions = function () {
+  /**
+   * Handles uncaught exceptions
+   * @param [callback] override the callback that evaluated after handling. Default: stops process
+   * @returns {ezLogger}
+   */
+  ezLogger.handleUncaughtExceptions = function (callback) {
+    (callback || (callback = function() {
+        process.exit(1);
+    }));
+
     process.on('uncaughtException', function (err) {
-      console.error('[UNCAUGHTEXCEPTION] {stack}', err);
+      console.error('[uncaught exception] {stack}', err);
+      if(callback && callback.constructor == Function) callback();
     });
 
     return ezLogger;

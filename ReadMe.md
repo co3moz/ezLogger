@@ -132,4 +132,22 @@ var ezLogger = require("ezlogger")();
 ezLogger.handleUncaughtExceptions();
 ```
 
+
+1.6.1 Features
+----------------------
+* ezlogger.express
+
+```javascript
+var express = require("express");
+var ezlogger = require("ezlogger");
+var app = express();
+
+app.use(ezlogger.express);
+app.get("/", function(req, res) {
+    res.send("ok");
+});
+
+app.listen(80);
+```
+
 [1]:https://github.com/co3moz/ezFormat
